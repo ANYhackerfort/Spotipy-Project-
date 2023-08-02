@@ -1,5 +1,5 @@
 # Spotipy-Project-
-Spotify sorting 
+CURRENT PROJECT, CLEARER CODE, OBJECT ORIENTATED PROGRAMMING. 
 RUN FROM playlistcreate.py right now
 
 7/31
