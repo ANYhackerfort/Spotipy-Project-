@@ -9,8 +9,8 @@ Basic funcitons
 - copy and create public playlist
 
 8/1 
-set up all classes 
-set up individual files
-organized and made code more efficient
-User friendly; able to read direct user inputs in console 
+- set up all classes 
+- set up individual files
+- organized and made code more efficient
+- User friendly; able to read direct user inputs in console 
 
