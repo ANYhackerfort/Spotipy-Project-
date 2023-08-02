@@ -4,40 +4,23 @@ from spotipy.oauth2 import SpotifyClientCredentials
 from spotipy.oauth2 import SpotifyOAuth
 import json
 from datetime import datetime
+from main import Environment
+from main import UserInput
 
-#pip install spotipy, datetime
-
-#Creating Environment
-os.environ["SPOTIPY_CLIENT_ID"] = "ed5cbf589898495db2525f4a918ecdd5"
-os.environ["SPOTIPY_CLIENT_SECRET"] = "cf8d56c29a9c45b983e7933ebbee009b"
-os.environ["SPOTIPY_REDIRECT_URI"] = "http://127.0.0.1:8080"
-
-#Client Login 
-client_credentials_manager = SpotifyClientCredentials(client_id='ed5cbf589898495db2525f4a918ecdd5', client_secret='cf8d56c29a9c45b983e7933ebbee009b')
-sp = spotipy.Spotify(client_credentials_manager = client_credentials_manager)
-
-#Authenticate With Account and specify permissions
-scope = 'playlist-modify-public playlist-modify-private'
-
-#Change to yours if you want to do testing on your computer
-username = '9upv4ku9el0ve5vp4m56rvbm8'
-
-#Object and Token Creation
-
-token = SpotifyOAuth(scope=scope, username=username)
-spotifyObject = spotipy.Spotify(auth_manager = token)
-
-class newPlayList:
+class NewPlayList(Environment):
 
     def __init__(self, playList, playListID):
         self.playList = playList
         self.playListID = playListID
+        super().__init__() 
+        environment = Environment()
+        self.SpotifyObject = environment.spotifyObject
+        self.username = environment.username
+        self.sp = environment.sp
 
-    def createPlaylist(self, listName, description):
-        playlist_name = input(listName)
-        playlist_description = input(description)
 
-        newPlaylist = spotifyObject.user_playlist_create(username, playlist_name, public=True, collaborative=False, description=playlist_description)
+    def createPlaylist(self, playlist_name, playlist_description):
+        newPlaylist = self.spotifyObject.user_playlist_create(self.username, playlist_name, public=True, collaborative=False, description=playlist_description)
         playlist_id = newPlaylist["id"]
         self.playListID = playlist_id
         print(playlist_id)
@@ -46,37 +29,50 @@ class newPlayList:
     def addToPlaylist(self, songs):
         playlist_id = self.playListID
         print(playlist_id)
-        spotifyObject.playlist_add_items(playlist_id, songs, position=0)
+        self.spotifyObject.playlist_add_items(playlist_id, songs, position=0)
 
     def copyFromPlaylist(self, playlist_id):
-        playList = spotifyObject.playlist(playlist_id, fields=None, market=None, additional_types=('track', ))
+        playList = self.spotifyObject.playlist(playlist_id, fields=None, market=None, additional_types=('track', ))
         songs = []
-        for track in sp.playlist_tracks('4F3glBXOBMm0lYtlelYtgm')["items"]:
+
+        for track in self.sp.playlist_tracks(playList["id"])["items"]:
             songs.append(track["track"]["uri"])
+        
         self.addToPlaylist(songs)
 
-    def organizeByYear(self): 
+    def organizeByYear(self, reverse=False): 
         dupleList = []
         playlist = []
-        for track in sp.playlist_tracks(self.playListID)["items"]:
+
+        for track in self.sp.playlist_tracks(self.playListID)["items"]:
             track_uri = track["track"]["uri"]
-            track_info = sp.track(track_uri)
+            track_info = self.sp.track(track_uri)
             release_date = track_info["album"]["release_date"]
             yearTuple = (track_uri, release_date)
-            print(yearTuple)
             dupleList.append(yearTuple)
         
-        dupleList = sorted(dupleList, key=lambda x: x[1])
-        print(dupleList)
+        if reverse == False:
+            dupleList = sorted(dupleList, key=lambda x: x[1])
+        else:
+            dupleList = sorted(dupleList, key=lambda x: x[1], reverse=True)
+
         for item in dupleList:
             playlist.append(item[0])
-        print(playlist)
-        spotifyObject.user_playlist_replace_tracks(username, self.playListID, playlist)
 
-    # def organizeSadToHappy():
+        self.spotifyObject.user_playlist_replace_tracks(self.username, self.playListID, playlist)
+
+ 
+    # def organizeEmotions(self, reverse=False):
     #     for track in sp.playlist_tracks(self.playListID)["items"]:
+    #         track_uri = track["track"]["uri"]
+    #         track_info = sp.track(track_uri)
+    #         release_date = track_info
 
-playlist = newPlayList('playlistName', 'playlistID')
-playlist.createPlaylist('enter name: ', 'description: ')
-playlist.copyFromPlaylist('0YCQ3PEOC3qUeuoZz2yt8k')
-playlist.organizeByYear() 
+if __name__ == "__main__":
+    
+    playlist = NewPlayList('playlistName', 'playlistID')
+    userInput = UserInput('', '', '', '') 
+    userInput.inputConsole() 
+    playlist.createPlaylist(userInput.playlist_name, userInput.playlist_description)
+    playlist.copyFromPlaylist(userInput.playlist_copy_from)
+    playlist.organizeByYear(reverse=userInput.reverseYear)
