@@ -13,16 +13,13 @@ app.config['SPOTIPY_CLIENT_SECRET'] = 'cf8d56c29a9c45b983e7933ebbee009b'
 app.config['SPOTIPY_REDIRECT_URI'] = 'http://127.0.0.1:8080/callback'
 
 # Initialize Spotipy
-sp = spotipy.Spotify(auth_manager=SpotifyOAuth(client_id='ed5cbf589898495db2525f4a918ecdd5', redirect_uri='http://127.0.0.1:8080/callback', client_secret= 'cf8d56c29a9c45b983e7933ebbee009b', scope='user-library-read', cache_path='.spotipyoauthcache'))
+sp = spotipy.Spotify(auth_manager=SpotifyOAuth(client_id='ed5cbf589898495db2525f4a918ecdd5', redirect_uri='http://127.0.0.1:8080/callback', client_secret= 'cf8d56c29a9c45b983e7933ebbee009b', scope='playlist-modify-public playlist-modify-private user-read-private', cache_path='.spotipyoauthcache'))
 
 @app.route('/')
 def index():
-    if 'spotify_username' in session:
+    if 'spotify_token_info' in session:
         from main import UserInput
 
-        # scope = 'playlist-modify-public playlist-modify-private'
-        # token = SpotifyOAuth(scope=scope, username=session["spotify_username"])
-        # spotifyObject = spotipy.Spotify(auth_manager = token)
         playlist = NewPlayList('playlistName', 'playlistID')
         userInput = UserInput('', '', '', '') 
         userInput.inputConsole()
@@ -44,7 +41,11 @@ def callback():
     code = request.args.get('code')
     token_info = sp.auth_manager.get_access_token(code)
     session['spotify_token_info'] = token_info
-    session['spotify_username'] = sp.me()['display_name']
+    try:
+        user_info = sp.me()
+        session['spotify_username'] = user_info['id']
+    except spotipy.SpotifyException:
+        session['spotify_username'] = None
     return redirect(url_for('index'))
 
 @app.route('/logout')
