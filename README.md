@@ -14,3 +14,9 @@ Basic funcitons
 - organized and made code more efficient
 - User friendly; able to read direct user inputs in console 
 
+8/2
+- Flask web app interphase set up
+- user can now use our app with any username 
+- authentication is secure
+
+IMPLEMENT QUALITY OF LIFE STARTING 8/2 
