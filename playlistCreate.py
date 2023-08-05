@@ -4,17 +4,15 @@ from spotipy.oauth2 import SpotifyClientCredentials
 from spotipy.oauth2 import SpotifyOAuth
 import json
 from datetime import datetime
-from main import Environment
-from main import UserInput
 
-class NewPlayList(Environment):
+class NewPlayList():
 
     def __init__(self, playList, playListID):
         self.playList = playList
         self.playListID = playListID
-        super().__init__() 
+        from application import Environment
         environment = Environment()
-        self.SpotifyObject = environment.spotifyObject
+        self.spotifyObject = environment.spotifyObject
         self.username = environment.username
         self.sp = environment.sp
 
@@ -68,11 +66,14 @@ class NewPlayList(Environment):
     #         track_info = sp.track(track_uri)
     #         release_date = track_info
 
-if __name__ == "__main__":
+# if __name__ == "__main__":
     
-    playlist = NewPlayList('playlistName', 'playlistID')
-    userInput = UserInput('', '', '', '') 
-    userInput.inputConsole() 
-    playlist.createPlaylist(userInput.playlist_name, userInput.playlist_description)
-    playlist.copyFromPlaylist(userInput.playlist_copy_from)
-    playlist.organizeByYear(reverse=userInput.reverseYear)
+#     playlist = NewPlayList('playlistName', 'playlistID')
+#     userInput = UserInput('', '', '', '') 
+#     userInput.inputConsole() 
+#     playlist.createPlaylist(userInput.playlist_name, userInput.playlist_description)
+#     playlist.copyFromPlaylist(userInput.playlist_copy_from)
+#     playlist.organizeByYear(reverse=userInput.reverseYear)
+
+
+

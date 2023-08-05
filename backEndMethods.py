@@ -9,7 +9,7 @@ class Tools:
         return str(cleaned) 
 
     def stringCondition(input):
-        if input == 'true':
+        if input == 'yes':
             return True
         else:
             return False 

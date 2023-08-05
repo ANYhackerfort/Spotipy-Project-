@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Spotify Space</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+    <link rel="icon" href="https://cdn.discordapp.com/attachments/1136875788034134151/1137183973563445348/AlienMusic-TA-modified.png">
+</head>
+<body>
+    <div class="container">
+        <div class="main-content">
+            <div class="sidebar2">
+                <h1 class="glow">{{ greeting_message }}</h1>
+                <h2>Temporary Menu Bar:</h2>
+                <!-- Single form for button submission -->
+                <form method="get" action="{{ url_for('index') }}">
+                    <button class="custom-button" type="submit">
+                        <span class="custom-button__text">Restart</span>
+                    </button>
+                </form>
+                <br>
+                <form method="get" action="{{ url_for('logout') }}">
+                    <button class="custom-button" type="submit">
+                        <span class="custom-button__text">Logout from current account</span>
+                    </button>
+                </form>
+            </div>
+            <br>
+            <div class="sidebar">
+                <h1>Modify Playlist based on musical traits: </h1>
+                <h2>These features are currently not available on Spotify and are only available here! </h2>
+                <!-- Single form for user input -->
+                <form method="post" action="{{ url_for('siyes') }}" onsubmit="return handleButtonClick()">
+                    <label for="name">Name:</label>
+                    <input type="text" id="name" name="name" required>
+                    <br>
+                    <label for="description">Description:</label>
+                    <input type="text" id="description" name="description" required>
+                    <br>
+                    <label for="link">Link of the playlist:</label>
+                    <input type="text" id="link" name="link" required>
+                    <br>
+                    <label for="year">Organize Songs based on their publish dates:</label>
+                    <input type="radio" id="yes" name="year" value="yes" required onclick="showChoices()">
+                    <label for="yes">Yes</label>
+                    <input type="radio" id="no" name="year" value="no"  onclick="hideChoices()">
+                    <label for="no">No</label>
+                    <br> 
+                    <div id="additionalChoices" style="display: none;">
+                        <label for="yearOptions"> What type? </label>
+                        <input type="radio" id="no" name="yearOptions" value="no">
+                        <label for="yes"> Old to New Songs</label>
+                        <input type="radio" id="yes" name="yearOptions" value="yes">
+                        <label for="no"> New to Old Songs </label>
+                        <br>
+                    </div>
+                    <br>
+                    <button class="custom-button" id="submitButton" type="submit">
+                        <span class="custom-button__text">Submit</span>
+                    </button>
+                </form>
+            </div> 
+        </div>
+        <div class="sidebar">
+            <h1> Output Box: </h1>
+            <h3>{{ status }}</h3>
+            <h4>{{ text }}</h4>
+            <h3>{{ attributes }}</h3>
+        </div>
+    </div>
+    <script>
+
+        function showChoices() {
+            var additionalChoicesDiv = document.getElementById("additionalChoices");
+            additionalChoicesDiv.style.display = "block";
+        }
+    
+        function hideChoices() {
+            var additionalChoicesDiv = document.getElementById("additionalChoices");
+            additionalChoicesDiv.style.display = "none";
+        }
+        
+        function loadingButton() {
+            const btn = document.getElementById("submitButton");
+            btn.classList.add("custom-button--loading");
+        }
+
+        function handleButtonClick() {
+            var button = document.getElementById('submitButton');
+            if (!button.disabled) {
+                button.disabled = true;
+                loadingButton();
+                setTimeout(function() {
+                    // This code runs after the simulated processing is complete.
+                    button.disabled = false;
+                    const btn = document.getElementById("submitButton");
+                    btn.classList.remove("custom-button--loading");
+                }, 30000); 
+            }
+        } 
+
+    </script>
+</body>
+</html>
+
+
+
+
+
+
+
