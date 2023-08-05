@@ -20,3 +20,15 @@ Basic funcitons
 - authentication is secure
 
 IMPLEMENT QUALITY OF LIFE STARTING 8/2 
+
+8/3
+Bug fix
+cache improvements, new backend code (unusabe right now) 
+improvements in user interphase
+
+8/4 
+Code Revamp for new ai methods
+built final templates for user interphase
+fixed issue with authentication errors 
+!! CACHE MANAGEMENT 
+
